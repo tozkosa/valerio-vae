@@ -50,6 +50,11 @@ class Autoencoder:
                        epochs=num_epochs,
                        shuffle=True)
 
+    def train_loader(self, x_ds, num_epochs):
+        self.model.fit(x_ds,
+                       x_ds,
+                       epochs=num_epochs)
+
     def save(self, save_folder="."):
         self._create_folder_if_it_doesnt_exist(save_folder)
         self._save_parameters(save_folder)
