@@ -3,12 +3,15 @@ import matplotlib.pyplot as plt
 
 from ae import Autoencoder
 from train import load_mnist
+import analysis
 
 
 def select_images(images, labels, num_images=10):
+    print("num_images" + str(len(images)))
     sample_images_index = np.random.choice(range(len(images)), num_images)
     sample_images = images[sample_images_index]
     sample_labels = labels[sample_images_index]
+    print(sample_labels)
     return sample_images, sample_labels
 
 
@@ -25,6 +28,7 @@ def plot_reconstructed_images(images, reconstructed_images):
         ax.axis("off")
         ax.imshow(reconstructed_image, cmap="gray_r")
     plt.show()
+
 
 def plot_images_encoded_in_latent_space(latent_representations, sample_labels):
     plt.figure(figsize=(10, 10))
