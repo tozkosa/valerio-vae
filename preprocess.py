@@ -64,6 +64,9 @@ class LogSpectrogramExtractor:
                             n_fft=self.frame_size,
                             hop_length=self.hop_length)[:-1]
         # (1 + frame_size / 2, num_frames)
+        spectrogram = np.abs(stft)
+        log_spectrogram = librosa.amplitude_to_db(spectrogram)
+        return log_spectrogram
 
 
 class MinMaxNormalizer:
@@ -160,6 +163,7 @@ class PreprocessingPipeline:
         feature = self.extractor.extract(signal)
         print(feature.shape)
         norm_feature = self.normalizer.normalize(feature)
+        print("after normalizer")
         save_path = self.saver.save_feature(norm_feature, file_path)
         self._store_min_max_value(save_path, feature.min(), feature.max())
 
