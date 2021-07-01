@@ -23,12 +23,12 @@ class Loader:
         self.mono = mono
 
     def load(self, file_path):
-        print("inside Loader.load")
+        # print("inside Loader.load")
         signal = librosa.load(file_path,
                               sr=self.sample_rate,
                               duration=self.duration,
                               mono=self.mono)[0]
-        print(signal.shape)
+        # print(signal.shape)
         return signal
 
 
@@ -101,10 +101,11 @@ class Saver:
     def save_min_max_values(self, min_max_values):
         save_path = os.path.join(self.min_max_values_save_dir,
                                  "min_max_values.pkl")
+        print(save_path)
         self._save(min_max_values, save_path)
 
     @staticmethod
-    def _save(self, data, save_path):
+    def _save(data, save_path):
         with open(save_path, "wb") as f:
             pickle.dump(data, f)
 
@@ -143,33 +144,32 @@ class PreprocessingPipeline:
         self._num_expected_samples = int(loader.sample_rate * loader.duration)
 
     def process(self, audio_files_dir):
-        print("inside process")
         for root, _, files in os.walk(audio_files_dir):
             for file in files:
-                print(file)
+                # print(file)
                 file_path = os.path.join(root, file)
                 self._process_file(file_path)
-                print(f"Processed file {file_path}")
+                # print(f"Processed file {file_path}")
         self.saver.save_min_max_values(self.min_max_values)
 
     def _process_file(self, file_path):
-        print("inside _process_file")
+        # print("inside _process_file")
         signal = self.loader.load(file_path)
         if self._is_padding_necessary(signal):
-            print("necessary")
+            # print("necessary")
             signal = self._apply_padding(signal)
-        print(f"test {signal.shape}")
-        print(signal)
+        # print(f"test {signal.shape}")
+        # print(signal)
         feature = self.extractor.extract(signal)
-        print(feature.shape)
+        # print(feature.shape)
         norm_feature = self.normalizer.normalize(feature)
-        print("after normalizer")
+        # print("after normalizer")
         save_path = self.saver.save_feature(norm_feature, file_path)
         self._store_min_max_value(save_path, feature.min(), feature.max())
 
     def _is_padding_necessary(self, signal):
         if len(signal) < self._num_expected_samples:
-            print(self._num_expected_samples)
+            # print(self._num_expected_samples)
             return True
         return False
 
@@ -192,9 +192,13 @@ if __name__ == "__main__":
     SAMPLE_RATE = 22050
     MONO = True
 
-    SPECTROGRARMS_SAVE_DIR = "/home/tozeki/datasets/fsdd/spectrograms/"
-    MIN_MAX_VALUES_SAVE_DIR = "/home/tozeki/datasets/fsdd"
-    FILES_DIR = "/home/tozeki/datasets/fsdd/audio/"
+    # SPECTROGRARMS_SAVE_DIR = "/home/tozeki/datasets/fsdd/spectrograms/"
+    # MIN_MAX_VALUES_SAVE_DIR = "/home/tozeki/datasets/fsdd"
+    # FILES_DIR = "/home/tozeki/datasets/fsdd/audio/"
+
+    SPECTROGRARMS_SAVE_DIR = "../datasets/fsdd/spectrograms/"
+    MIN_MAX_VALUES_SAVE_DIR = "../datasets/fsdd/"
+    FILES_DIR = "../datasets/fsdd/audio/"
 
     # instantiate all objects
 
@@ -211,6 +215,5 @@ if __name__ == "__main__":
     preprocessing_pipline.normalizer = min_max_normalizer
     preprocessing_pipline.saver = saver
 
-    print("main")
     preprocessing_pipline.process(FILES_DIR)
 
