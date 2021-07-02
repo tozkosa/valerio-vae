@@ -58,6 +58,11 @@ class VAE:
                        epochs=num_epochs,
                        shuffle=True)
 
+    def train_loader(self, x_ds, num_epochs):
+        self.model.fit(x_ds,
+                       x_ds,
+                       epochs=num_epochs)
+
     def save(self, save_folder="."):
         self._create_folder_if_it_doesnt_exist(save_folder)
         self._save_parameters(save_folder)
@@ -214,7 +219,7 @@ class VAE:
         return x
 
     def _add_bottleneck(self, x):
-        """Flatten data and add bottleneck with Gasussian sampling (Dense layer)."""
+        """Flatten data and add bottleneck with Gaussian sampling (Dense layer)."""
         self._shape_before_bottleneck = K.int_shape(x)[1:]  # [2, 7, 7, 32]
         x = Flatten()(x)
         self.mu = Dense(self.latent_space_dim, name="mu")(x)

@@ -9,6 +9,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import MeanSquaredError
 import numpy as np
 
+
 class Autoencoder:
 
     def __init__(self,
@@ -17,11 +18,11 @@ class Autoencoder:
                  conv_kernels,
                  conv_strides,
                  latent_space_dim):
-        self.input_shape = input_shape # [28, 28, 1] mnist
-        self.conv_filters = conv_filters # [2, 4, 8]
-        self.conv_kernels = conv_kernels # [3, 5, 3]
-        self.conv_strides = conv_strides # [1, 2, 2]
-        self.latent_space_dim = latent_space_dim # 2
+        self.input_shape = input_shape  # [28, 28, 1] mnist
+        self.conv_filters = conv_filters  # [2, 4, 8]
+        self.conv_kernels = conv_kernels  # [3, 5, 3]
+        self.conv_strides = conv_strides  # [1, 2, 2]
+        self.latent_space_dim = latent_space_dim  # 2
 
         self.encoder = None
         self.decoder = None
@@ -50,6 +51,11 @@ class Autoencoder:
                        epochs=num_epochs,
                        shuffle=True)
 
+    def train_loader(self, x_ds, num_epochs):
+        self.model.fit(x_ds,
+                       x_ds,
+                       epochs=num_epochs)
+
     def save(self, save_folder="."):
         self._create_folder_if_it_doesnt_exist(save_folder)
         self._save_parameters(save_folder)
@@ -62,7 +68,6 @@ class Autoencoder:
         latent_representations = self.encoder.predict(images)
         reconstructed_images = self.decoder.predict(latent_representations)
         return reconstructed_images, latent_representations
-
 
     @classmethod
     def load(cls, save_folder="."):
@@ -93,7 +98,6 @@ class Autoencoder:
     def _save_weights(self, save_folder):
         save_path = os.path.join(save_folder, "weights.h5")
         self.model.save_weights(save_path)
-
 
     def _build(self):
         self._build_encoder()
@@ -193,7 +197,7 @@ class Autoencoder:
 
     def _add_bottleneck(self, x):
         """Flatten data and add bottleneck (Dense layer)."""
-        self._shape_before_bottleneck = K.int_shape(x) [1:] # [2, 7, 7, 32]
+        self._shape_before_bottleneck = K.int_shape(x)[1:]  # [2, 7, 7, 32]
         x = Flatten()(x)
         x = Dense(self.latent_space_dim, name="encoder_output")(x)
         return x
@@ -208,4 +212,3 @@ if __name__ == "__main__":
         latent_space_dim=2
     )
     autoencoder.summary()
-

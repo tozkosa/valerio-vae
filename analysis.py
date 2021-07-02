@@ -37,7 +37,7 @@ def plot_images_encoded_in_latent_space(latent_representations, sample_labels):
                 cmap="rainbow",
                 c=sample_labels,
                 alpha=0.5,
-                s=2)
+                s=8)
     plt.colorbar()
     plt.show()
 

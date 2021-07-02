@@ -149,7 +149,7 @@ class PreprocessingPipeline:
                 # print(file)
                 file_path = os.path.join(root, file)
                 self._process_file(file_path)
-                # print(f"Processed file {file_path}")
+                print(f"Processed file {file_path}")
         self.saver.save_min_max_values(self.min_max_values)
 
     def _process_file(self, file_path):
@@ -192,13 +192,13 @@ if __name__ == "__main__":
     SAMPLE_RATE = 22050
     MONO = True
 
-    # SPECTROGRARMS_SAVE_DIR = "/home/tozeki/datasets/fsdd/spectrograms/"
-    # MIN_MAX_VALUES_SAVE_DIR = "/home/tozeki/datasets/fsdd"
-    # FILES_DIR = "/home/tozeki/datasets/fsdd/audio/"
+    SPECTROGRARMS_SAVE_DIR = "/home/tozeki/datasets/fsdd/spectrograms/"
+    MIN_MAX_VALUES_SAVE_DIR = "/home/tozeki/datasets/fsdd"
+    FILES_DIR = "/home/tozeki/datasets/fsdd/audio/"
 
-    SPECTROGRARMS_SAVE_DIR = "../datasets/fsdd/spectrograms/"
-    MIN_MAX_VALUES_SAVE_DIR = "../datasets/fsdd/"
-    FILES_DIR = "../datasets/fsdd/audio/"
+    # SPECTROGRARMS_SAVE_DIR = "../datasets/fsdd/spectrograms/"
+    # MIN_MAX_VALUES_SAVE_DIR = "../datasets/fsdd/"
+    # FILES_DIR = "../datasets/fsdd/audio/"
 
     # instantiate all objects
 
